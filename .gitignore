@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+#OpenAI API Key
+OpenAI_API_KEY.txt
