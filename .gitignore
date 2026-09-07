@@ -219,3 +219,6 @@ __marimo__/
 
 #OpenAI API Key
 OpenAI_API_KEY.txt
+
+#output reports
+reports/
