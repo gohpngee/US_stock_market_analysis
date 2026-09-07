@@ -7,6 +7,7 @@ from typing import Literal
 
 from agents import Agent, Runner, WebSearchTool
 from pydantic import BaseModel
+from datetime import datetime
 
 class Source(BaseModel):
     title: str
@@ -269,14 +270,22 @@ RiskReview:
             f"{type(report).__name__}"
         )
 
-    Path("market_report.md").write_text(report, encoding="utf-8")
+    report_dir = Path(__file__).resolve().parent / "reports"
+    report_dir.mkdir(exist_ok=True)
+
+    timestamp = datetime.now().astimezone().strftime("%Y%m%d_%H%M%S")
+    output_path = report_dir / f"market_report_{timestamp}.md"
+    output_path.write_text(report, encoding="utf-8")
+
+    print(f"\nReport saved to {output_path}\n")
+
     return report
 
 
 DAILY_QUESTION = (
-    "Produce today's market outlook for the S&P 500, "
+    "Produce today's market outlook for the S&P 500 as well as Malaysian market, "
     "including valuation, macroeconomic conditions, catalysts, and key risks, "
-    "and then recommend a trading strategy for the S&P 500."
+    "and then recommend a trading strategy for the S&P 500 and Malaysian market."
 )
 
 
@@ -284,7 +293,6 @@ async def main() -> None:
     question = " ".join(sys.argv[1:]).strip() or DAILY_QUESTION
     report = await run_workflow(question)
 
-    print("\nReport saved to market_report.md\n")
     print(report)
 
 
